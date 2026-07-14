@@ -36,6 +36,7 @@ RAG). The ecosystem moves fast — open a PR (with a source link) if something i
   - [Digital Twin / Virtual Commissioning](#digital-twin--virtual-commissioning)
 - [APIs available, no MCP yet](#apis-available-no-mcp-yet)
 - [Contributing](#contributing)
+- [Citation](#citation)
 - [License](#license)
 
 ## Official
@@ -230,19 +231,29 @@ don't build the same server twice. When it's live, send a PR to move it up into 
 
 ## Contributing
 
-Contributions welcome! Please open a PR that:
+Contributions are very welcome! Please read the [contribution guidelines](contributing.md) first —
+in short: add the entry to the right section with a working link, mark it **official** or
+**community**, and confirm it genuinely drives the tool over MCP (not a docs-only / RAG server).
 
-1. Adds the entry to the right section, keeping tables tidy.
-2. Includes a **working link** to the MCP server (repo or vendor page).
-3. Notes whether it is **official** (vendor-published) or **community**.
-4. Confirms it genuinely drives the tool over MCP (not a docs-only / RAG server).
-
-Entries that can't be verified, or that are pure API wrappers / doc-retrieval with no tool-driving
-MCP surface, belong in the [full catalog](./awesome-mcp-power-engineering-full-catalog.md) with a note, not here.
-
-**Want to build a server for one of the gaps?** Open an issue at
+**Want to build a server for one of the [gaps](#apis-available-no-mcp-yet)?** Open an issue at
 [Yuz2023/PE-MCP](https://github.com/Yuz2023/PE-MCP/issues) to claim it first — it keeps two people
 from building the same thing, and you'll get a hand from others working on the same class of tool.
+
+## Citation
+
+If this list is useful in your research or work, please cite it:
+
+> Yuzhuo Li. *Awesome MCP for Power Engineering.* 2026.
+> https://github.com/Yuz2023/Awesome-MCP-for-Power-Engineering
+
+```bibtex
+@misc{li2026awesomemcppe,
+  author       = {Li, Yuzhuo},
+  title        = {Awesome MCP for Power Engineering},
+  year         = {2026},
+  howpublished = {\url{https://github.com/Yuz2023/Awesome-MCP-for-Power-Engineering}}
+}
+```
 
 ## License
 
