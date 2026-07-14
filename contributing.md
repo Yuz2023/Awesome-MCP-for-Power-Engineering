@@ -1,49 +1,63 @@
 # Contribution Guidelines
 
-Thanks for helping keep this list accurate and complete! Please read these guidelines before opening
-a pull request.
+Thanks for helping keep this list useful and evidence-based. Please read these guidelines before
+opening a pull request.
 
 ## What belongs here
 
-The main [README](README.md) lists **MCP servers that genuinely drive a power-engineering tool** —
-open a project, set parameters, run a simulation/build, read results — over the Model Context
-Protocol. For each tool we feature the **most mature one or two** servers plus any **vendor-official**
-one. Everything else verified goes in the
-[full catalog](awesome-mcp-power-engineering-full-catalog.md).
+The main [README](README.md) lists publicly accessible MCP integrations relevant to power
+engineering. Entries may be:
 
-**Does qualify:** a server exposing MCP tools that control the actual tool (simulator, solver, EDA
-suite, HIL rig, instrument, PLC).
+- **Operational integrations:** MCP tools that act on an engineering application, solver, device,
+  industrial endpoint, or engineering workflow.
+- **Engineering-data services:** narrowly scoped engineering-data MCP services, clearly described
+  as data access rather than simulator or device control.
 
-**Does not qualify for the main list:** plain API/SDK wrappers, generic chatbots, or docs-only / RAG
-servers that only search documentation. If it's real but doc-only, add it to the full catalog with a
-note.
+A library or API without an MCP transport and tool/resource surface does not qualify.
+Documentation-search or RAG-only servers are not treated as operational integrations; they may
+appear in the [extended catalog](awesome-mcp-power-engineering-full-catalog.md) only when clearly
+labeled.
+
+Inclusion is evidence-limited. Source inspection does not imply successful installation,
+licensed-software execution, simulator runtime, HIL, instrument, target, or hardware validation.
 
 ## Adding an entry
 
 Open a pull request that:
 
-1. Adds the entry to the correct section, keeping the tables tidy and alphabetical where reasonable.
-2. Includes a **working link** to the MCP server (GitHub repo or vendor page).
-3. Marks it **official** (published by the software vendor) or **community** (third party).
-4. Confirms — ideally in the PR description — how you verified it drives the tool over MCP (tried it,
-   read the source, saw the `@mcp.tool` surface, etc.).
-5. Keeps the description short: the tool, and one phrase on maturity or what's distinctive.
+1. Adds the entry to the correct domain section.
+2. Provides a working, publicly accessible repository or first-party documentation link.
+3. Records the publisher as `First-party`, `Project steward`, `Institutional`, or `Community`.
+4. Records availability as `Available`, `Unassessed`, `Alpha`, `Early Access`, `Experimental`, or
+   `Reference`.
+5. Describes access accurately: source available, bundled, hosted, commercial, and any required
+   product. Do not describe source as open source unless its license has been checked.
+6. States only the validation obtained: `Repository-checked`, `Vendor-documented`,
+   `Source-inspected`, `Mock-tested`, `Install-checked`, `Runtime-tested`, or
+   `Hardware/HIL-tested`.
+7. Summarizes the supporting evidence in the pull-request description. Mocked or unit tests must not
+   be presented as simulator, HIL, instrument, target, or hardware validation.
 
-If a tool already has one or two mature servers listed, add further alternatives to the
-[full catalog](awesome-mcp-power-engineering-full-catalog.md) rather than the main list.
+If a tool already has representative implementations in the main list, add further alternatives to
+the [extended catalog](awesome-mcp-power-engineering-full-catalog.md).
 
-## Claiming a gap
+## Proposing a gap
 
-The [*APIs available, no MCP yet*](README.md#apis-available-no-mcp-yet) section tracks tools with an
-automation API but no MCP server. Want to build one? Open an issue at
-[Yuz2023/PE-MCP](https://github.com/Yuz2023/PE-MCP/issues) to claim it first, so two people don't
-build the same server twice.
+The [public implementation gaps](README.md#public-implementation-gaps) section records a dated
+search for publicly accessible implementations. Search the existing issues first, then
+[open an issue in this repository](https://github.com/Yuz2023/Awesome-MCP-for-Power-Engineering/issues)
+with the tool name, its public automation documentation, and the date checked.
 
 ## Quality bar
 
-- Links must resolve; dead links get removed.
-- No self-promotion of empty or non-functional repos.
-- One entry per line; keep formatting consistent with existing rows.
+- Links must resolve; moved links should use the canonical destination, and dead links should be
+  removed or explicitly marked archived.
+- All submitted evidence must be publicly accessible. Do not include private URLs, local filesystem
+  paths, confidential projects, customer data, credentials, or unpublished validation artifacts.
+- Validation labels must not exceed the evidence supplied.
+- Do not infer maturity from stars, tool counts, or mocked test counts.
+- No self-promotion of empty or non-functional repositories.
+- Keep tables and terminology consistent with the main list.
 
 By contributing, you agree to license your contributions under
 [CC BY 4.0](LICENSE), the same license as this list.

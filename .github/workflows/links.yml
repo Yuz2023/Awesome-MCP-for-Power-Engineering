@@ -1,0 +1,42 @@
+name: Check links
+
+on:
+  pull_request:
+    paths:
+      - "**/*.md"
+      - ".github/workflows/links.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "**/*.md"
+      - ".github/workflows/links.yml"
+  schedule:
+    - cron: "17 8 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  links:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Check public links
+        uses: lycheeverse/lychee-action@v2.9.0
+        with:
+          # Microchip's page is public but returns 403 to automated clients.
+          args: >-
+            --root-dir "${{ github.workspace }}"
+            --verbose
+            --no-progress
+            --max-retries 3
+            --accept 200,206,429
+            --exclude "https://www.microchip.com/en-us/resources/model-context-protocol-server"
+            "./**/*.md"
+          fail: true
+          jobSummary: true
+          token: "${{ secrets.GITHUB_TOKEN }}"
