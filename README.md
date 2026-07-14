@@ -5,239 +5,264 @@
 > multiphysics / EM / thermal, motor and machine design, battery / storage / renewables, EDA,
 > FPGA / DSP / embedded control, instrumentation, and SCADA / industrial protocols.
 
-MCP lets AI agents (Claude, Codex, Copilot, …) drive the specialized tools engineers already use —
-circuit and EMT simulators, FEA solvers, HIL rigs, EDA suites, lab instruments — instead of
-re-implementing them. This list tracks what's actually available today.
+MCP lets AI agents (Claude, Codex, Copilot, …) interact with specialized engineering tools —
+circuit and EMT simulators, FEA solvers, EDA suites, lab instruments, and industrial software —
+instead of re-implementing them. This list tracks publicly documented implementations.
 
-This page is the **curated pick**: for each tool, the most mature one or two servers plus any
-vendor-official one. Every server verified real in the sweep — including all the alternatives we
-didn't feature here — is in the **[full verified catalog →](./awesome-mcp-power-engineering-full-catalog.md)**.
+This page is a curated selection of public implementations. The
+**[extended catalog →](./awesome-mcp-power-engineering-full-catalog.md)** records additional
+alternatives without claiming that every project has been installed or tested against licensed
+software or hardware.
 
-*Last verified: 2026-07. Entries checked to exist and to genuinely drive the tool (not doc-only
-RAG). The ecosystem moves fast — open a PR (with a source link) if something is out of date.*
+*Last reviewed: 2026-07-14. Public repositories were `Source-inspected` where available; first-party
+documentation was reviewed otherwise. A `Source-inspected` entry is not a simulator-runtime,
+target, instrument, or hardware validation. The ecosystem moves quickly; please open an issue or
+pull request with a public source when an entry changes.*
 
 ## Contents
 
-- [Official](#official) — published or bundled by the software vendor
-- [Community](#community)
-  - [Power Systems / Grid / EMT](#power-systems--grid--emt)
-  - [Power Electronics / Circuit / SPICE](#power-electronics--circuit--spice)
-  - [System-Level / Modelica / FMI](#system-level--modelica--fmi)
-  - [Electromagnetic / Antenna](#electromagnetic--antenna)
-  - [Multiphysics / CAE / FEA](#multiphysics--cae--fea)
-  - [Motor / Machines](#motor--machines)
-  - [Battery / Storage / PV](#battery--storage--pv)
+- [How to read the tables](#how-to-read-the-tables)
+- [Core power engineering](#core-power-engineering)
+  - [Power systems / grid / EMT](#power-systems--grid--emt)
+  - [Power electronics / circuit / SPICE](#power-electronics--circuit--spice)
+  - [System-level modeling / Modelica / FMI](#system-level-modeling--modelica--fmi)
+  - [Motor condition monitoring / diagnostics](#motor-condition-monitoring--diagnostics)
+  - [Battery / storage / PV](#battery--storage--pv)
   - [Wind](#wind)
-  - [EDA / PCB / IC](#eda--pcb--ic)
-  - [FPGA / HDL Verification](#fpga--hdl-verification)
-  - [Embedded / MCU Toolchains](#embedded--mcu-toolchains)
-  - [Instrumentation / Test & Measurement](#instrumentation--test--measurement)
-  - [SCADA / Industrial Protocols](#scada--industrial-protocols)
-  - [Digital Twin / Virtual Commissioning](#digital-twin--virtual-commissioning)
-- [APIs available, no MCP yet](#apis-available-no-mcp-yet)
+  - [Instrumentation / test and measurement](#instrumentation--test-and-measurement)
+- [Adjacent and enabling engineering tools](#adjacent-and-enabling-engineering-tools)
+  - [SCADA / PLC / industrial automation and protocols](#scada--plc--industrial-automation-and-protocols)
+  - [Multiphysics / CAE / FEA](#multiphysics--cae--fea)
+  - [Electromagnetic / antenna / photonics](#electromagnetic--antenna--photonics)
+  - [PCB / ECAD](#pcb--ecad)
+  - [IC / ASIC EDA](#ic--asic-eda)
+  - [FPGA / HDL verification](#fpga--hdl-verification)
+  - [Embedded controller toolchains](#embedded-controller-toolchains)
+  - [Bus / network simulation and test](#bus--network-simulation-and-test)
+  - [Digital twin / virtual commissioning](#digital-twin--virtual-commissioning)
+  - [Engineering data / component selection](#engineering-data--component-selection)
+  - [Building / energy-system modeling](#building--energy-system-modeling)
+- [Public implementation gaps](#public-implementation-gaps)
 - [Contributing](#contributing)
 - [Citation](#citation)
 - [License](#license)
 
-## Official
+## How to read the tables
 
-Published or bundled by the software vendor.
+The columns deliberately separate facts that are often conflated:
 
-| Software | Vendor | MCP Server |
-|---|---|---|
-| MATLAB / Simulink (incl. Embedded/HDL Coder) | MathWorks | [matlab/matlab-mcp-server](https://github.com/matlab/matlab-mcp-server) |
-| Ansys MAPDL | Ansys | [ansys/pymapdl-mcp](https://github.com/ansys/pymapdl-mcp) |
-| Code Composer Studio (C2000 DSP/DSC) | Texas Instruments | Built into CCS IDE (20.5+) |
-| SIMBA (power-electronics circuit sim) | AESIM.Tech | [SIMBA Assistant](https://simba.io/news) |
-| Device product data (part selection) | Microchip | [Microchip MCP](https://www.microchip.com/en-us/resources/model-context-protocol-server) |
-| Test & measurement instruments (SCPI) | Rohde & Schwarz | [Rohde-Schwarz/RsInstrument](https://github.com/Rohde-Schwarz/RsInstrument) |
-| ESP-IDF (build/flash/target) | Espressif | [esp-idf-tools MCP (built-in, v6+)](https://developer.espressif.com/blog/2026/04/esp-idf-tools-mcp-server/) |
-| WinCC OA (SCADA) | Siemens / ETM | [winccoa/winccoa-ae-js-mcpserver](https://github.com/winccoa/winccoa-ae-js-mcpserver) |
-| Ignition (SCADA/MES/HMI) | Inductive Automation | [Ignition MCP Module](https://inductiveautomation.com/news/inductive-automation-announces-mcp-module-during-2025-ignition-community-conference) (EA, GA 2026) |
-| EnergyPlus (building energy) | LBNL | [LBNL-ETA/EnergyPlus-MCP](https://github.com/LBNL-ETA/EnergyPlus-MCP) |
-| ODE (Modelica IDE) | Orthogonal | [Orthogonalpub/modelica_simulation_mcp_server](https://github.com/Orthogonalpub/modelica_simulation_mcp_server) |
-| OpenModelica (OMEdit) | OpenModelica | [in-progress, issue #15385](https://github.com/OpenModelica/OpenModelica/issues/15385) |
-| realvirtual.io (Unity virtual commissioning) | realvirtual GmbH | [game4automation/io.realvirtual.mcp](https://github.com/game4automation/io.realvirtual.mcp) |
+- **Publisher:** `First-party` is published by the vendor; `Project steward` is published by the
+  official upstream project maintainer; `Institutional` is published by a research institution;
+  and `Community` is third-party.
+- **Availability:** `Available`, `Unassessed`, `Alpha`, `Early Access`, `Experimental`, or
+  `Reference`. This reports the publisher's status when established; `Unassessed` means the latest
+  review did not establish one. Availability is separate from validation.
+- **Access:** whether source is publicly available, or the server is bundled, hosted, or tied to
+  commercial software. `Source available` makes no claim about the project's license.
+- **Validation:** `Repository-checked`, `Vendor-documented`, `Source-inspected`, `Mock-tested`, or a
+  stronger runtime level when direct evidence is available. No entry implies hardware validation
+  unless it says so.
 
-## Community
+Projects that only search documentation are kept out of the curated tables.
 
-Third-party servers, each verified to exist and to drive the tool. Where several exist for one tool,
-the most mature one or two are shown; the rest are in the [full catalog](./awesome-mcp-power-engineering-full-catalog.md).
+## Core power engineering
 
-### Power Systems / Grid / EMT
+### Power systems / grid / EMT
 
-Much of the grid/EMT stack is aggregated in [Power-Agent/PowerMCP](https://github.com/Power-Agent/PowerMCP).
+| Software | MCP server | Publisher | Availability | Access | Validation |
+|---|---|---|---|---|---|
+| Multi-engine grid studies: PSS/E, PowerWorld, PowerFactory, PSLF, ANDES, OpenDSS, pandapower, PSCAD | [Power-Agent/PowerMCP](https://github.com/Power-Agent/PowerMCP) | Community | Alpha | Source available; vendor products may be required | Source-inspected |
+| PyPSA | [open-energy-transition/pypsa-mcp](https://github.com/open-energy-transition/pypsa-mcp) | Community | Unassessed | Source available | Source-inspected |
+| OpenDSS | [ahmedelshazly27/opendss-mcp-server](https://github.com/ahmedelshazly27/opendss-mcp-server) | Community | Unassessed | Source available | Source-inspected |
+| DIgSILENT PowerFactory | [Diptargha/mcp-powerfactory](https://github.com/Diptargha/mcp-powerfactory) | Community | Unassessed | Source available; PowerFactory required | Source-inspected |
 
-| Software | MCP Server |
-|---|---|
-| PSS/E · PowerWorld · PowerFactory · PSLF · ANDES · OpenDSS · pandapower | [Power-Agent/PowerMCP](https://github.com/Power-Agent/PowerMCP) |
-| PSCAD / EMTDC | [ll0pez20/pscad-mcp](https://github.com/ll0pez20/pscad-mcp) |
-| PyPSA | [open-energy-transition/pypsa-mcp](https://github.com/open-energy-transition/pypsa-mcp) |
-| OpenDSS (standalone, on PyPI) | [ahmedelshazly27/opendss-mcp-server](https://github.com/ahmedelshazly27/opendss-mcp-server) |
+### Power electronics / circuit / SPICE
 
-<sub>Also verified: standalone PowerFactory ([Diptargha](https://github.com/Diptargha/mcp-powerfactory)) and pandapower ([Semagram-Energy](https://smithery.ai/server/@Semagram-Energy/pandapower_mcp)) servers — see full catalog.</sub>
+| Software | MCP server | Publisher | Availability | Access | Validation |
+|---|---|---|---|---|---|
+| SIMBA | [SIMBA MCP Server](https://doc.simba.io/version_history/26_03/) | First-party · AESIM.Tech / Powersys | Available (SIMBA 26.03+) | Optional commercial add-on | Vendor-documented |
+| LTspice | [Cognitohazard/ltspice-mcp](https://github.com/Cognitohazard/ltspice-mcp) · [xuio/ltspice-mcp](https://github.com/xuio/ltspice-mcp) | Community | Unassessed | Source available; LTspice required | Source-inspected |
+| ngspice | [gtnoble/ngspice-mcp](https://github.com/gtnoble/ngspice-mcp) | Community | Unassessed | Source available | Source-inspected |
+| QSPICE | [kh6570/HAbedini-qspice-mcp](https://github.com/kh6570/HAbedini-qspice-mcp) | Community | Unassessed | Source available; QSPICE required | Source-inspected |
+| LTspice / ngspice / QSPICE via spicelib | [lucasgerads/spicelib-mcp](https://github.com/lucasgerads/spicelib-mcp) | Community | Unassessed | Source available; selected simulator required | Source-inspected |
+| PLECS | [haitangccy/plecs-mcp](https://github.com/haitangccy/plecs-mcp) | Community | Unassessed | Source available; PLECS required | Mock-tested; no live PLECS evidence recorded here |
 
-### Power Electronics / Circuit / SPICE
+### System-level modeling / Modelica / FMI
 
-| Software | MCP Server |
-|---|---|
-| LTspice | [Cognitohazard/ltspice-mcp](https://github.com/Cognitohazard/ltspice-mcp) · [xuio/ltspice-mcp](https://github.com/xuio/ltspice-mcp) (macOS GUI + screenshots) |
-| ngspice | [gtnoble/ngspice-mcp](https://github.com/gtnoble/ngspice-mcp) |
-| QSPICE | [HAbedini/qspice-mcp](https://github.com/kh6570/HAbedini-qspice-mcp) |
-| Multi-engine (LTspice/ngspice/QSPICE via spicelib) | [lucasgerads/spicelib-mcp](https://github.com/lucasgerads/spicelib-mcp) |
-| PLECS | [haitangccy/plecs-mcp](https://github.com/haitangccy/plecs-mcp) (XML-RPC, 49 tests) |
+| Software | MCP server | Publisher | Availability | Access | Validation |
+|---|---|---|---|---|---|
+| MATLAB | [matlab/matlab-mcp-server](https://github.com/matlab/matlab-mcp-server) | First-party · MathWorks | Available | Source available under MathWorks license terms; MATLAB required | Source-inspected and Vendor-documented |
+| Simulink Agentic Toolkit used with MATLAB MCP Server | [toolkit](https://github.com/matlab/simulink-agentic-toolkit) · [MATLAB MCP Server](https://github.com/matlab/matlab-mcp-server) | First-party · MathWorks | Available | Source available under MathWorks license terms; required MathWorks products | Source-inspected and Vendor-documented |
+| ODE Modelica IDE | [Orthogonalpub/modelica_simulation_mcp_server](https://github.com/Orthogonalpub/modelica_simulation_mcp_server) | First-party · Orthogonal Supersystems | Available | Hosted; token required | Source-inspected |
+| OpenModelica / OMEdit | [built-in experimental MCP server](https://github.com/OpenModelica/OpenModelica/blob/master/OMEdit/OMEditLIB/MCP/README.md) | Project steward · OSMC | Experimental (OpenModelica 1.27.0; disabled by default) | Bundled | Source-inspected and Vendor-documented |
+| FMU / FMI via FMPy | [Novia-RDI-Seafaring/mcp-fmi](https://github.com/Novia-RDI-Seafaring/mcp-fmi) | Community | Unassessed | Source available | Source-inspected |
+| MWORKS.Sysplorer | [ACupOfHim/mworks-mcp-server](https://github.com/ACupOfHim/mworks-mcp-server) | Community | Unassessed | Source available; Sysplorer required | Source-inspected |
 
-<sub>Four more LTspice servers + PySpice + a second PLECS server are in the full catalog.</sub>
+### Motor condition monitoring / diagnostics
 
-### System-Level / Modelica / FMI
+| Software | MCP server | Publisher | Availability | Access | Validation |
+|---|---|---|---|---|---|
+| Motor-current-signature-analysis fault diagnosis | [LGDiMaggio/mcp-motor-current-signature-analysis](https://github.com/LGDiMaggio/mcp-motor-current-signature-analysis) | Community | Unassessed | Source available | Source-inspected |
 
-| Software | MCP Server |
-|---|---|
-| FMU / FMI (via FMPy) | [Novia-RDI-Seafaring/mcp-fmi](https://github.com/Novia-RDI-Seafaring/mcp-fmi) |
-| MWORKS.Sysplorer | [ACupOfHim/mworks-mcp-server](https://github.com/ACupOfHim/mworks-mcp-server) |
+### Battery / storage / PV
 
-<sub>Vendor-official Modelica servers (ODE, OpenModelica) are under [Official](#official).</sub>
-
-### Electromagnetic / Antenna
-
-| Software | MCP Server |
-|---|---|
-| openEMS (FDTD) | [RFingAdam/mcp-openems](https://github.com/RFingAdam/mcp-openems) |
-| NEC2 (wire-antenna MoM) | [RFingAdam/mcp-nec2-antenna](https://github.com/RFingAdam/mcp-nec2-antenna) |
-| Ansys Lumerical (FDTD/MODE/INTERCONNECT) | [leisymqaz/lumerical-mcp](https://github.com/leisymqaz/lumerical-mcp) |
-
-### Multiphysics / CAE / FEA
-
-| Software | MCP Server |
-|---|---|
-| Ansys AEDT (Maxwell/HFSS/Q3D/Icepak) | [LaplaceYoung/ansys-aedt-mcp](https://github.com/LaplaceYoung/ansys-aedt-mcp) |
-| Ansys Fluent | [knewnothing/ansys-mcp-server](https://github.com/knewnothing-git/ansys-mcp-server) |
-| Ansys Mechanical | [codersag/mechanical-mcp](https://github.com/codersag/mechanical-mcp) |
-| COMSOL Multiphysics | [wjc9011/COMSOL_Multiphysics_MCP](https://github.com/wjc9011/COMSOL_Multiphysics_MCP) |
-| OpenFOAM | [webworn/openfoam-mcp-server](https://github.com/webworn/openfoam-mcp-server) |
-| CST Studio Suite | [RFingAdam/mcp-cst-studio](https://github.com/RFingAdam/mcp-cst-studio) |
-| Abaqus/CAE | [jianzhichun/abaqus-mcp-server](https://github.com/jianzhichun/abaqus-mcp-server) |
-| FreeCAD FEM + CalculiX | [neka-nat/freecad-mcp](https://github.com/neka-nat/freecad-mcp) |
-
-### Motor / Machines
-
-| Software | MCP Server |
-|---|---|
-| Motor-current-signature-analysis fault diagnosis | [LGDiMaggio/mcp-motor-current-signature-analysis](https://github.com/LGDiMaggio/mcp-motor-current-signature-analysis) |
-
-<sub>Motor FEA (Motor-CAD, JMAG, Flux, Pyleecan) has no MCP yet — see [gaps](#apis-available-no-mcp-yet).</sub>
-
-### Battery / Storage / PV
-
-| Software | MCP Server |
-|---|---|
-| Battery electrochemical simulation (PyBaMM) | [BinuShefieldShifani/Batterytwin-mcp](https://github.com/BinuShefieldShifani/Batterytwin-mcp) |
-| NREL PVWatts v8 (PV production) | [hoodsy/solar-data-mcp](https://github.com/hoodsy/solar-data-mcp) |
-| Residential ESS + inverter (telemetry + charge control) | [michaelkrasa/alpha-ess-mcp-server](https://github.com/michaelkrasa/alpha-ess-mcp-server) |
-
-<sub>More: EG4, Victron, two more PVWatts servers — full catalog. These are device/telemetry-level, not cell design.</sub>
+| Software | MCP server | Publisher | Availability | Access | Validation |
+|---|---|---|---|---|---|
+| Battery electrochemical simulation via PyBaMM | [BinuShefieldShifani/Batterytwin-mcp](https://github.com/BinuShefieldShifani/Batterytwin-mcp) | Community | Unassessed | Source available | Source-inspected |
+| NREL PVWatts v8 | [hoodsy/solar-data-mcp](https://github.com/hoodsy/solar-data-mcp) | Community | Unassessed | Source available; external API | Source-inspected |
+| Alpha ESS inverter and storage telemetry/control | [michaelkrasa/alpha-ess-mcp-server](https://github.com/michaelkrasa/alpha-ess-mcp-server) | Community | Unassessed | Source available; device/API credentials required | Source-inspected; no device validation recorded here |
 
 ### Wind
 
-| Software | MCP Server |
-|---|---|
-| QBlade (aeroelastic / BEM / LLFVW) | [JakubRasken/qblade-mcp-server](https://github.com/JakubRasken/qblade-mcp-server) |
+| Software | MCP server | Publisher | Availability | Access | Validation |
+|---|---|---|---|---|---|
+| QBlade aeroelastic / BEM / LLFVW | [JakubRasken/qblade-mcp-server](https://github.com/JakubRasken/qblade-mcp-server) | Community | Experimental | Source available; QBlade required | Source-inspected |
 
-### EDA / PCB / IC
+### Instrumentation / test and measurement
 
-| Software | MCP Server |
-|---|---|
-| KiCad | [lamaalrajih/kicad-mcp](https://github.com/lamaalrajih/kicad-mcp) |
-| EasyEDA / JLCPCB | [oaslananka/easyeda-mcp-pro](https://github.com/oaslananka/easyeda-mcp-pro) |
-| Altium Designer | [salitronic/eda-agent](https://github.com/salitronic/eda-agent) (290+ tools) · [coffeenmusic/altium-mcp](https://github.com/coffeenmusic/altium-mcp) |
-| Yosys / OpenROAD (RTL-to-GDS) | [NellyW8/MCP4EDA](https://github.com/NellyW8/MCP4EDA) · [luarss/openroad-mcp](https://github.com/luarss/openroad-mcp) |
-| Cadence Virtuoso | [michelebergo/virtuoso-schematic-mcp](https://github.com/michelebergo/virtuoso-schematic-mcp) |
+| Software | MCP server | Publisher | Availability | Access | Validation |
+|---|---|---|---|---|---|
+| Rohde & Schwarz SCPI instruments | [RsInstrument MCP Server](https://rsinstrument.readthedocs.io/en/latest/StepByStepGuide.html#mcp-server) | First-party · Rohde & Schwarz | Available (RsInstrument 1.120.0+) | Source available package; instruments required | Source-inspected and Vendor-documented |
+| Generic VISA / SCPI instruments | [Hizuki1030/visa-mcp](https://github.com/Hizuki1030/visa-mcp) | Community | Unassessed | Source available; VISA backend/instrument required | Source-inspected |
+| QCoDeS instrument setups | [caidish/instrMCP](https://github.com/caidish/instrMCP) | Community | Unassessed | Source available; safe mode by default; instruments required | Source-inspected |
+| VISA / SSH / REST / serial equipment | [techmanual-ai/lablink-mcp](https://github.com/techmanual-ai/lablink-mcp) | Community | Unassessed | Source available; equipment required | Source-inspected |
 
-<sub>Three more Altium servers + a multi-EDA netlist parser are in the full catalog.</sub>
+## Adjacent and enabling engineering tools
 
-### FPGA / HDL Verification
+These projects support power-engineering workflows but are not all power-domain-specific.
 
-Toolchains for FPGA-based power controllers and firmware.
+### SCADA / PLC / industrial automation and protocols
 
-| Software | MCP Server |
-|---|---|
-| AMD Vivado / RapidWright | [Xilinx/fpl26_optimization_contest](https://github.com/Xilinx/fpl26_optimization_contest) (reference example) · [coreyhahn/vivado_mcp](https://github.com/coreyhahn/vivado_mcp) |
-| Intel / Altera Quartus | [abbbe/fpga-mcp-servers](https://github.com/abbbe/fpga-mcp-servers) (DE10-Nano) |
-| Open-source EDA suite (Yosys/Verible/GTKWave/…) | [ssql2014/mcp4eda](https://github.com/ssql2014/mcp4eda) |
-| SystemVerilog static analysis (pyslang) | [ariklapid/pyslang-mcp](https://github.com/ariklapid/pyslang-mcp) |
-| Cadence Xcelium | [hslee-cmyk/xcelium-mcp](https://github.com/hslee-cmyk/xcelium-mcp) |
+| Software | MCP server | Publisher | Availability | Access | Validation |
+|---|---|---|---|---|---|
+| WinCC OA | [winccoa/winccoa-ae-js-mcpserver](https://github.com/winccoa/winccoa-ae-js-mcpserver) | First-party · Siemens / ETM | Available | Source available; WinCC OA required | Source-inspected and Vendor-documented |
+| Ignition | [Ignition MCP Module](https://forum.inductiveautomation.com/t/mcp-module-early-access/113966/22) | First-party · Inductive Automation | Early Access; full release planned for February 2027 | Commercial infrastructure module; no first-party primitives | Vendor-documented |
+| Ignition Gateway API | [WhiskeyHouse/ignition-mcp](https://github.com/WhiskeyHouse/ignition-mcp) | Community | Unassessed | Source available; Ignition required | Source-inspected |
+| OPC UA | [kukapay/opcua-mcp](https://github.com/kukapay/opcua-mcp) | Community | Unassessed | Source available; OPC UA endpoint required | Source-inspected |
+| Modbus TCP/RTU master and slave | [alejoseb/ModbusMCP](https://github.com/alejoseb/ModbusMCP) | Community | Unassessed | Source available; endpoint required | Source-inspected |
+| Siemens TIA Portal | [feelautom/tia-copilot-genai-bridge](https://github.com/feelautom/tia-copilot-genai-bridge) | Community · feelautom | Available | Commercial; public blueprint with proprietary driver | Source-inspected; proprietary core not validated |
+| Siemens WinCC Unified | [vogler75/winccua-mcp-server](https://github.com/vogler75/winccua-mcp-server) | Community | Unassessed | Source available; WinCC Unified required | Source-inspected |
+| B&R Automation Studio | [AndrewMusser/br-automation-mcp](https://github.com/AndrewMusser/br-automation-mcp) | Community | Unassessed | Source available; Automation Studio required | Source-inspected |
 
-### Embedded / MCU Toolchains
+### Multiphysics / CAE / FEA
 
-| Software | MCP Server |
-|---|---|
-| ARM Cortex-M / RISC-V debug (probe-rs) | [adancurusul/embedded-debugger-mcp](https://github.com/adancurusul/embedded-debugger-mcp) |
-| STM32 (arm-gcc + OpenOCD/SWD) | [shieldyguy/stm32-mcp](https://github.com/shieldyguy/stm32-mcp) |
-| ESP-IDF (community) | [horw/esp-mcp](https://github.com/horw/esp-mcp) |
-| PlatformIO (multi-board) | [jl-codes/platformio-mcp](https://github.com/jl-codes/platformio-mcp) |
-| GNU GDB (embedded/remote) | [pansila/mcp_server_gdb](https://github.com/pansila/mcp_server_gdb) |
-| Serial / UART I/O | [Adancurusul/serial-mcp-server](https://github.com/Adancurusul/serial-mcp-server) |
+| Software | MCP server | Publisher | Availability | Access | Validation |
+|---|---|---|---|---|---|
+| Ansys Mechanical APDL | [ansys/pymapdl-mcp](https://github.com/ansys/pymapdl-mcp) | First-party · Ansys | Available | Source available; MAPDL required | Source-inspected and Vendor-documented |
+| Ansys AEDT: Maxwell / HFSS / Q3D / Icepak | [LaplaceYoung/ansys-aedt-mcp](https://github.com/LaplaceYoung/ansys-aedt-mcp) | Community | Unassessed | Source available; AEDT required | Source-inspected |
+| Ansys Fluent | [knewnothing-git/ansys-mcp-server](https://github.com/knewnothing-git/ansys-mcp-server) | Community | Unassessed | Source available; Fluent required | Source-inspected |
+| Ansys Mechanical | [codersag/mechanical-mcp](https://github.com/codersag/mechanical-mcp) | Community | Unassessed | Source available; Mechanical required | Source-inspected |
+| COMSOL Multiphysics | [wjc9011/COMSOL_Multiphysics_MCP](https://github.com/wjc9011/COMSOL_Multiphysics_MCP) | Community | Unassessed | Source available; COMSOL required | Source-inspected |
+| OpenFOAM | [webworn/openfoam-mcp-server](https://github.com/webworn/openfoam-mcp-server) | Community | Experimental | Source available | Source-inspected; project reports partial and incomplete solver coverage |
+| CST Studio Suite | [RFingAdam/mcp-cst-studio](https://github.com/RFingAdam/mcp-cst-studio) | Community | Unassessed | Source available; CST required | Source-inspected |
+| Abaqus/CAE | [jianzhichun/abaqus-mcp-server](https://github.com/jianzhichun/abaqus-mcp-server) | Community | Unassessed | Source available; Abaqus required | Source-inspected |
+| FreeCAD FEM / CalculiX | [neka-nat/freecad-mcp](https://github.com/neka-nat/freecad-mcp) | Community | Unassessed | Source available | Source-inspected |
 
-<sub>Arduino CLI, QEMU, Zephyr/west servers are in the full catalog.</sub>
+### Electromagnetic / antenna / photonics
 
-### Instrumentation / Test & Measurement
+| Software | MCP server | Publisher | Availability | Access | Validation |
+|---|---|---|---|---|---|
+| openEMS FDTD | [RFingAdam/mcp-openems](https://github.com/RFingAdam/mcp-openems) | Community | Unassessed | Source available | Source-inspected |
+| NEC2 wire-antenna MoM | [RFingAdam/mcp-nec2-antenna](https://github.com/RFingAdam/mcp-nec2-antenna) | Community | Unassessed | Source available | Source-inspected |
+| Ansys Lumerical FDTD / MODE / INTERCONNECT | [leisymqaz/lumerical-mcp](https://github.com/leisymqaz/lumerical-mcp) | Community | Experimental | Source available; Lumerical required | Source-inspected |
 
-| Software | MCP Server |
-|---|---|
-| Generic VISA / SCPI instruments | [Hizuki1030/visa-mcp](https://github.com/Hizuki1030/visa-mcp) |
-| QCoDeS lab-instrument setups | [caidish/instrMCP](https://github.com/caidish/instrMCP) |
-| Multi-protocol lab equipment (VISA/SSH/REST/serial) | [techmanual-ai/lablink-mcp](https://github.com/techmanual-ai/lablink-mcp) |
+### PCB / ECAD
 
-<sub>Vendor-official R&S is under [Official](#official). Dedicated Siglent / Keysight / RIGOL oscilloscope servers are in the full catalog.</sub>
+| Software | MCP server | Publisher | Availability | Access | Validation |
+|---|---|---|---|---|---|
+| KiCad | [lamaalrajih/kicad-mcp](https://github.com/lamaalrajih/kicad-mcp) | Community | Unassessed | Source available | Source-inspected |
+| EasyEDA / JLCPCB | [oaslananka/easyeda-mcp-pro](https://github.com/oaslananka/easyeda-mcp-pro) | Community | Unassessed | Source available; external services may be required | Source-inspected |
+| Altium Designer | [salitronic/eda-agent](https://github.com/salitronic/eda-agent) | Community | Experimental | Source available; Altium required | Source-inspected; no independent runtime validation |
+| Altium Designer | [coffeenmusic/altium-mcp](https://github.com/coffeenmusic/altium-mcp) | Community | Unassessed | Source available; Altium required | Source-inspected |
 
-### SCADA / Industrial Protocols
+### IC / ASIC EDA
 
-Adjacent to power engineering — substation, plant, and DER field-device access.
+| Software | MCP server | Publisher | Availability | Access | Validation |
+|---|---|---|---|---|---|
+| OpenROAD / OpenROAD-flow-scripts | [The-OpenROAD-Project/OpenROAD-MCP](https://github.com/The-OpenROAD-Project/OpenROAD-MCP) | Project steward · OpenROAD Project | Available | Source available | Source-inspected |
+| Yosys / OpenROAD workflows | [NellyW8/MCP4EDA](https://github.com/NellyW8/MCP4EDA) | Community | Unassessed | Source available | Source-inspected |
+| Cadence Virtuoso | [michelebergo/virtuoso-schematic-mcp](https://github.com/michelebergo/virtuoso-schematic-mcp) | Community | Unassessed | Source available; Virtuoso required | Source-inspected |
 
-| Software | MCP Server |
-|---|---|
-| OPC UA | [kukapay/opcua-mcp](https://github.com/kukapay/opcua-mcp) |
-| Modbus (TCP/RTU, master + slave) | [alejoseb/ModbusMCP](https://github.com/alejoseb/ModbusMCP) |
-| Ignition (community) | [WhiskeyHouse/ignition-mcp](https://github.com/WhiskeyHouse/ignition-mcp) |
-| Siemens TIA Portal | [feelautom/tia-copilot-genai-bridge](https://github.com/feelautom/tia-copilot-genai-bridge) (commercial) |
-| Siemens WinCC Unified | [vogler75/winccua-mcp-server](https://github.com/vogler75/winccua-mcp-server) |
-| B&R Automation Studio | [AndrewMusser/br-automation-mcp](https://github.com/AndrewMusser/br-automation-mcp) |
+### FPGA / HDL verification
 
-<sub>Three more OPC UA and three more Modbus servers are in the full catalog.</sub>
+| Software | MCP server | Publisher | Availability | Access | Validation |
+|---|---|---|---|---|---|
+| AMD Vivado / RapidWright | [Xilinx/fpl26_optimization_contest](https://github.com/Xilinx/fpl26_optimization_contest) | First-party · AMD/Xilinx | Reference | Source available contest example; tool licenses may be required | Source-inspected |
+| AMD Vivado | [coreyhahn/vivado_mcp](https://github.com/coreyhahn/vivado_mcp) | Community | Unassessed | Source available; Vivado required | Source-inspected |
+| Intel / Altera Quartus | [abbbe/fpga-mcp-servers](https://github.com/abbbe/fpga-mcp-servers) | Community | Unassessed | Source available; Quartus required | Source-inspected |
+| Yosys / Verible / GTKWave and related tools | [ssql2014/mcp4eda](https://github.com/ssql2014/mcp4eda) | Community | Unassessed | Source available | Source-inspected |
+| SystemVerilog static analysis via pyslang | [ariklapid/pyslang-mcp](https://github.com/ariklapid/pyslang-mcp) | Community | Unassessed | Source available | Source-inspected |
+| Cadence Xcelium | [hslee-cmyk/xcelium-mcp](https://github.com/hslee-cmyk/xcelium-mcp) | Community | Experimental | Source available; Xcelium required | Source-inspected |
 
-### Digital Twin / Virtual Commissioning
+### Embedded controller toolchains
 
-| Software | MCP Server |
-|---|---|
-| Vector CANoe (bus simulation / HIL-adjacent) | [VectorCANoe/CANoe-mcp](https://github.com/VectorCANoe/CANoe-mcp) |
+| Software | MCP server | Publisher | Availability | Access | Validation |
+|---|---|---|---|---|---|
+| CCStudio project and debug servers | [TI MCP documentation](https://software-dl.ti.com/ccs/esd/documents/application_notes/appnote-ccs_ai_code_assistant.html) | First-party · Texas Instruments | Available (CCStudio 20.5.x+) | Bundled | Vendor-documented |
+| ESP-IDF build / flash / target tools | [ESP-IDF Tools Local MCP Server](https://developer.espressif.com/blog/2026/04/esp-idf-tools-mcp-server/) | First-party · Espressif | Available (ESP-IDF 6.0+) | Bundled | Vendor-documented |
+| ESP-IDF | [horw/esp-mcp](https://github.com/horw/esp-mcp) | Community | Unassessed | Source available; ESP-IDF required | Source-inspected |
+| ARM Cortex-M / RISC-V debugging via probe-rs | [adancurusul/embedded-debugger-mcp](https://github.com/adancurusul/embedded-debugger-mcp) | Community | Unassessed | Source available; target hardware optional | Source-inspected |
+| STM32 via arm-gcc and OpenOCD/SWD | [shieldyguy/stm32-mcp](https://github.com/shieldyguy/stm32-mcp) | Community | Unassessed | Source available; target/toolchain required | Source-inspected |
+| PlatformIO | [jl-codes/platformio-mcp](https://github.com/jl-codes/platformio-mcp) | Community | Unassessed | Source available | Source-inspected |
+| GNU GDB | [pansila/mcp_server_gdb](https://github.com/pansila/mcp_server_gdb) | Community | Unassessed | Source available | Source-inspected |
+| Serial / UART I/O | [Adancurusul/serial-mcp-server](https://github.com/Adancurusul/serial-mcp-server) | Community | Unassessed | Source available; device required | Source-inspected |
 
-<sub>Vendor-official realvirtual.io (Unity) is under [Official](#official).</sub>
+### Bus / network simulation and test
 
-## APIs available, no MCP yet
+| Software | MCP server | Publisher | Availability | Access | Validation |
+|---|---|---|---|---|---|
+| Vector CANoe configuration, CAPL, measurement and tests | [VectorCANoe/CANoe-mcp](https://github.com/VectorCANoe/CANoe-mcp) | Community | Unassessed | Source available; CANoe required | Source-inspected; no hardware validation recorded here |
 
-Tools with a documented automation API (Python/COM/Tcl/scripting) but **no known MCP server** —
-**open for you to claim**. Want to build one? Open an issue at
-[Yuz2023/PE-MCP](https://github.com/Yuz2023/PE-MCP/issues) to call dibs and coordinate, so two people
-don't build the same server twice. When it's live, send a PR to move it up into the list.
+### Digital twin / virtual commissioning
 
-- **Real-time / HIL** (an entirely blank class — high-value): OPAL-RT / RT-LAB / HYPERSIM, Typhoon HIL, dSPACE (SCALEXIO/VEOS), RTDS / RSCAD FX, NI VeriStand, Speedgoat, Plexim RT Box, imperix
-- **Substation & protection** (confirmed zero MCP): IEC 61850 / GOOSE / MMS, DNP3, protection relays / IEDs (SEL, ABB Relion, Siemens SIPROTEC, GE Multilin)
-- **Wide-area measurement** (confirmed zero MCP): PMU / synchrophasor, C37.118, openPDC
-- **Motor / magnetics FEA:** Ansys Motor-CAD (PyMotorCAD), JMAG-Designer, Altair Flux/FluxMotor (PyFlux), FEMM (pyFEMM), Pyleecan
-- **Offline circuit:** PLECS *(has community servers above; no official)*, PSIM, Saber, SIMetrix/SIMPLIS, GeckoCIRCUITS
-- **Thermal / power-device** (no *driving* MCP — Cantera only has docs-RAG): Flotherm/FloEFD, Ansys Sherlock, SiC/GaN device modeling
-- **FPGA / DSP toolchains (CLI-scriptable):** Lattice Radiant/Diamond, Microchip Libero, Microchip MPLAB (native build/debug), NXP MCUXpresso, ADI CrossCore/SHARC (CCES), NI LabVIEW FPGA (target-aware compile)
-- **Grid (additional):** GridLAB-D, GridCal, MATPOWER, PowerModels.jl, EMTP-RV, ETAP, DPsim
+| Software | MCP server | Publisher | Availability | Access | Validation |
+|---|---|---|---|---|---|
+| realvirtual.io / Unity | [Python MCP server](https://github.com/game4automation/realvirtual-MCP) · [Unity package](https://github.com/game4automation/io.realvirtual.mcp) | First-party · realvirtual GmbH | Available | Source available; Unity/realvirtual environment required | Source-inspected |
+
+### Engineering data / component selection
+
+| Software | MCP server | Publisher | Availability | Access | Validation |
+|---|---|---|---|---|---|
+| Microchip device selection and supply-chain data | [Microchip MCP Server](https://www.microchip.com/en-us/resources/model-context-protocol-server) | First-party · Microchip | Available | Public hosted endpoint | Vendor-documented |
+
+### Building / energy-system modeling
+
+| Software | MCP server | Publisher | Availability | Access | Validation |
+|---|---|---|---|---|---|
+| EnergyPlus building-energy simulation | [LBNL-ETA/EnergyPlus-MCP](https://github.com/LBNL-ETA/EnergyPlus-MCP) | Institutional · LBNL research team | Unassessed (package version 0.1.0) | Source available | Source-inspected |
+
+## Public implementation gaps
+
+The documented public search did not find a qualifying, publicly accessible, tool-specific MCP for
+the items below as of **2026-07-14**. This is a search result, not proof that no implementation
+exists. Generic protocol bridges, indirect control paths, documentation-only servers, and
+unimplemented scaffolds are not counted as direct tool integrations.
+
+- **Direct real-time / HIL integrations:** OPAL-RT / RT-LAB / HYPERSIM, Typhoon HIL, dSPACE
+  SCALEXIO / VEOS, RTDS / RSCAD FX, NI VeriStand, Speedgoat, Plexim RT Box, and imperix. Some tools
+  may be reachable indirectly through MATLAB, OPC UA, or another general integration.
+- **Substation protocols and protection devices:** IEC 61850 / GOOSE / MMS, DNP3, and device-family
+  integrations for SEL, ABB Relion, Siemens SIPROTEC, and GE Multilin.
+- **Wide-area measurement:** PMU / synchrophasor workflows, IEEE C37.118, and openPDC.
+- **Motor and magnetics FEA:** Ansys Motor-CAD, JMAG-Designer, Altair Flux / FluxMotor, FEMM, and
+  Pyleecan.
+- **Additional offline circuit tools:** PSIM, Saber, SIMetrix / SIMPLIS, and GeckoCIRCUITS.
+- **Thermal and power-device engineering:** Flotherm / FloEFD, Ansys Sherlock, and dedicated SiC /
+  GaN device-modeling workflows.
+- **Additional FPGA / DSP toolchains:** Lattice Radiant / Diamond, Microchip Libero and MPLAB,
+  NXP MCUXpresso, ADI CrossCore / SHARC, and target-aware LabVIEW FPGA compilation.
+- **Additional grid tools:** GridLAB-D, VeraGrid (formerly GridCal), MATPOWER, PowerModels.jl,
+  EMTP-RV, ETAP, and DPsim.
+
+Want to propose an implementation or correct a gap? [Open an issue in this repository](https://github.com/Yuz2023/Awesome-MCP-for-Power-Engineering/issues/new)
+with a public source and the validation level you can substantiate.
 
 ## Contributing
 
-Contributions are very welcome! Please read the [contribution guidelines](contributing.md) first —
-in short: add the entry to the right section with a working link, mark it **official** or
-**community**, and confirm it genuinely drives the tool over MCP (not a docs-only / RAG server).
-
-**Want to build a server for one of the [gaps](#apis-available-no-mcp-yet)?** Open an issue at
-[Yuz2023/PE-MCP](https://github.com/Yuz2023/PE-MCP/issues) to claim it first — it keeps two people
-from building the same thing, and you'll get a hand from others working on the same class of tool.
+Contributions are welcome. Please read the [contribution guidelines](contributing.md) first. Add an
+entry to the appropriate domain, provide a working public source, and report publisher,
+availability, access, and validation separately. Source inspection does not count as licensed
+software, simulator-runtime, instrument, target, or hardware validation.
 
 ## Citation
 
