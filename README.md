@@ -257,7 +257,8 @@ If this list is useful in your research or work, please cite it:
 
 ## License
 
-[![CC0](https://licensebuttons.net/p/zero/1.0/88x31.png)](https://creativecommons.org/publicdomain/zero/1.0/)
+[![CC BY 4.0](https://licensebuttons.net/l/by/4.0/88x31.png)](https://creativecommons.org/licenses/by/4.0/)
 
-To the extent possible under law, contributors have waived all copyright and related rights to this
-work.
+© 2026 Yuzhuo Li and contributors. This list is licensed under [CC BY 4.0](LICENSE) — you are free to
+share and adapt it, including commercially, as long as you give appropriate credit (see
+[Citation](#citation)).

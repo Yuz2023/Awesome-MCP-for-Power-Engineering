@@ -45,5 +45,5 @@ build the same server twice.
 - No self-promotion of empty or non-functional repos.
 - One entry per line; keep formatting consistent with existing rows.
 
-By contributing, you agree to release your contributions under the [CC0](LICENSE) public-domain
-dedication.
+By contributing, you agree to license your contributions under
+[CC BY 4.0](LICENSE), the same license as this list.
