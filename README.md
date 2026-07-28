@@ -51,9 +51,9 @@ pull request with a public source when an entry changes.*
 
 ## Protocol baseline
 
-The current specification is **[2026-07-28](https://blog.modelcontextprotocol.io/posts/2026-07-28/)**,
-the largest revision since the protocol launched. The changes most likely to matter when deploying a
-server from this list:
+The current specification is **[2026-07-28](https://blog.modelcontextprotocol.io/posts/2026-07-28/)** —
+in MCP maintainer David Soria Parra's words, "MCP's most important [release] since remote MCP first
+launched over a year ago." The changes most likely to matter when deploying a server from this list:
 
 - **Stateless core.** Protocol-level sessions and the `initialize` handshake are gone, along with the
   `Mcp-Session-Id` header. Each request carries its own protocol version, client identity, and
@@ -65,10 +65,11 @@ server from this list:
 - **Extensions.** Long-running work moves to the **Tasks** extension (`tasks/get` · `tasks/update` ·
   `tasks/cancel`), which matters for simulation and HIL servers where a run outlives a single call.
   **MCP Apps** adds server-rendered HTML in sandboxed iframes.
-- **Deprecations.** Roots, Sampling, Logging, the older HTTP+SSE transport, and Dynamic Client
-  Registration are deprecated under a new feature-lifecycle policy guaranteeing at least twelve
-  months before removal. Authorization tightens toward OAuth/OIDC practice, including mandatory
-  RFC 9207 issuer validation.
+- **Deprecations.** Roots, Sampling, Logging, and Dynamic Client Registration are deprecated
+  under a new feature-lifecycle policy guaranteeing at least twelve months before removal. The
+  older HTTP+SSE transport, already deprecated before that policy existed, instead carries a
+  shorter transition window (three months after SEP-2596 reaches Final). Authorization tightens
+  toward OAuth/OIDC practice, including mandatory RFC 9207 issuer validation.
 - **SDKs.** The four Tier 1 SDKs (TypeScript, Python, Go, C#) support 2026-07-28; Rust is in beta.
 
 *This list does not track which specification version each catalogued server implements, and no
