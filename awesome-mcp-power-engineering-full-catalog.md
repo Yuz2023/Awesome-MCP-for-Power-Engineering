@@ -44,7 +44,6 @@ for the validation vocabulary.
 | LTspice | https://github.com/BrosnanYuen/bltspice_mcp | Community | Unassessed | Source available | Repository-checked |
 | LTspice | https://github.com/Janadasroor/ltspice-mcp | Community | Unassessed | Source available | Repository-checked |
 | LTspice | https://github.com/AbiyuLingga/LTSpice-MCP | Community | Unassessed | Source available; LTspice required | Repository-checked |
-| LTspice | https://github.com/bw493/ltspice-mcp-automation | Community | Unassessed | Source available; LTspice required | Repository-checked |
 | LTspice (Linux / Wine) | https://github.com/River-jp/ltspice-mcp-for-linux | Community | Unassessed | Source available; LTspice under Wine required | Repository-checked |
 | SPICE via spicelib | https://github.com/lucasgerads/spicelib-mcp | Community | Unassessed | Source available | Repository-checked |
 | PLECS | https://github.com/yingriyanlong/plecs-mcp | Community | Unassessed | Source available | Repository-checked |
