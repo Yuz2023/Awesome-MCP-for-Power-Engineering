@@ -169,6 +169,7 @@ These projects support power-engineering workflows but are not all power-domain-
 | Ansys Mechanical | [codersag/mechanical-mcp](https://github.com/codersag/mechanical-mcp) | Community | Unassessed | Source available; Mechanical required | Source-inspected |
 | COMSOL Multiphysics | [wjc9011/COMSOL_Multiphysics_MCP](https://github.com/wjc9011/COMSOL_Multiphysics_MCP) | Community | Unassessed | Source available; COMSOL required | Source-inspected |
 | OpenFOAM | [webworn/openfoam-mcp-server](https://github.com/webworn/openfoam-mcp-server) | Community | Experimental | Source available | Source-inspected; project reports partial and incomplete solver coverage |
+| CST Studio Suite | [ismailakdag/cst-studio-mcp](https://github.com/ismailakdag/cst-studio-mcp) | Community | Unassessed | Source available; CST required | Source-inspected; project reports offline and fake-CST tests only, no live CST run |
 | Abaqus/CAE | [jianzhichun/abaqus-mcp-server](https://github.com/jianzhichun/abaqus-mcp-server) | Community | Unassessed | Source available; Abaqus required | Source-inspected |
 | FreeCAD FEM / CalculiX | [neka-nat/freecad-mcp](https://github.com/neka-nat/freecad-mcp) | Community | Unassessed | Source available | Source-inspected |
 

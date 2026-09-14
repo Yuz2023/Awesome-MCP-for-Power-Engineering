@@ -91,6 +91,7 @@ for the validation vocabulary.
 | Ansys Mechanical | https://github.com/codersag/mechanical-mcp | Community | Unassessed | Source available; Mechanical required | Source-inspected |
 | COMSOL Multiphysics | https://github.com/wjc9011/COMSOL_Multiphysics_MCP | Community | Unassessed | Source available; COMSOL required | Source-inspected |
 | OpenFOAM | https://github.com/webworn/openfoam-mcp-server | Community | Experimental | Source available | Source-inspected; project reports partial and incomplete solver coverage |
+| CST Studio Suite | https://github.com/ismailakdag/cst-studio-mcp | Community | Unassessed | Source available; CST required | Source-inspected; project reports offline and fake-CST tests only, no live CST run |
 | Abaqus/CAE | https://github.com/jianzhichun/abaqus-mcp-server | Community | Unassessed | Source available | Repository-checked |
 | FreeCAD FEM Workbench + CalculiX | https://github.com/sandraschi/freecad-mcp | Community | Unassessed | Source available | Repository-checked |
 | FreeCAD FEM + CalculiX | https://github.com/neka-nat/freecad-mcp | Community | Unassessed | Source available | Repository-checked |
