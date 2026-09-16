@@ -21,6 +21,7 @@ pull request with a public source when an entry changes.*
 
 ## Contents
 
+- [Protocol baseline](#protocol-baseline)
 - [How to read the tables](#how-to-read-the-tables)
 - [Core power engineering](#core-power-engineering)
   - [Power systems / grid / EMT](#power-systems--grid--emt)
@@ -47,6 +48,34 @@ pull request with a public source when an entry changes.*
 - [Contributing](#contributing)
 - [Citation](#citation)
 - [License](#license)
+
+## Protocol baseline
+
+The current specification is **[2026-07-28](https://blog.modelcontextprotocol.io/posts/2026-07-28/)** —
+in MCP maintainer David Soria Parra's words, "MCP's most important [release] since remote MCP first
+launched over a year ago." The changes most likely to matter when deploying a server from this list:
+
+- **Stateless core.** Protocol-level sessions and the `initialize` handshake are gone, along with the
+  `Mcp-Session-Id` header. Each request carries its own protocol version, client identity, and
+  capabilities; capabilities are fetched on demand via `server/discover`. Streamable HTTP adds
+  `Mcp-Method` and `Mcp-Name` headers so gateways can route without parsing the body.
+- **Multi round-trip requests.** A server needing user input mid-call returns an `input_required`
+  result with opaque `requestState` instead of opening a reverse channel; the client re-issues the
+  call with its responses.
+- **Extensions.** Long-running work moves to the **Tasks** extension (`tasks/get` · `tasks/update` ·
+  `tasks/cancel`), which matters for simulation and HIL servers where a run outlives a single call.
+  **MCP Apps** adds server-rendered HTML in sandboxed iframes.
+- **Deprecations.** Roots, Sampling, Logging, and Dynamic Client Registration are deprecated
+  under a new feature-lifecycle policy guaranteeing at least twelve months before removal. The
+  older HTTP+SSE transport, already deprecated before that policy existed, instead carries a
+  shorter transition window (three months after SEP-2596 reaches Final). Authorization tightens
+  toward OAuth/OIDC practice, including mandatory RFC 9207 issuer validation.
+- **SDKs.** The four Tier 1 SDKs (TypeScript, Python, Go, C#) support 2026-07-28; Rust is in beta.
+
+*This list does not track which specification version each catalogued server implements, and no
+entry below has been re-reviewed against 2026-07-28. Publishing the new specification does not
+disable servers built against earlier versions. Treat spec-version support as a separate question
+from the Availability and Validation columns, and confirm it with the project before deploying.*
 
 ## How to read the tables
 
